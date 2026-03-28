@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>HytaleServerManager</Name>
+  <Repository>ghcr.io/nebula-codes/hytale-server-manager:latest</Repository>
+  <Registry>https://github.com/nebula-codes/hytale_server_manager/pkgs/container/hytale-server-manager</Registry>
+  <Network>host</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/nebula-codes/hytale_server_manager/issues</Support>
+  <Project>https://github.com/nebula-codes/hytale_server_manager</Project>
+  <Overview>
+    Hytale Server Manager is a web-based dashboard for managing Hytale game servers. Features include real-time console access, server monitoring and metrics, mod management via Modtale, automated backup scheduling, player tracking, scheduled tasks, Discord webhook notifications, and role-based permissions (admin/moderator/viewer).
+
+    IMPORTANT: Before starting, generate the three required secrets and paste them into the environment variables below:
+      JWT_SECRET:               openssl rand -hex 64
+      JWT_REFRESH_SECRET:       openssl rand -hex 64
+      SETTINGS_ENCRYPTION_KEY:  openssl rand -hex 16
+
+    Default login: username "admin", password "Admin123!@#" — change immediately after first login.
+  </Overview>
+  <Category>GameServers: Tools:</Category>
+  <WebUI>http://[IP]:3001/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/KA_HytaleServerManager.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/nebula-codes/hytale_server_manager/refs/heads/main/unraid/Hytale_Icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+
+  <!-- Security secrets — generate before first run -->
+  <Config
+    Name="JWT Secret"
+    Target="JWT_SECRET"
+    Default=""
+    Mode=""
+    Description="JWT authentication secret. Generate with: openssl rand -hex 64"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="true"></Config>
+
+  <Config
+    Name="JWT Refresh Secret"
+    Target="JWT_REFRESH_SECRET"
+    Default=""
+    Mode=""
+    Description="JWT refresh token secret. Generate with: openssl rand -hex 64"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="true"></Config>
+
+  <Config
+    Name="Settings Encryption Key"
+    Target="SETTINGS_ENCRYPTION_KEY"
+    Default=""
+    Mode=""
+    Description="32-character hex encryption key for settings. Generate with: openssl rand -hex 16"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="true"></Config>
+
+  <!-- Core settings -->
+  <Config
+    Name="Node Environment"
+    Target="NODE_ENV"
+    Default="production"
+    Mode=""
+    Description="Application environment."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">production</Config>
+
+  <Config
+    Name="Web UI Port"
+    Target="PORT"
+    Default="3001"
+    Mode=""
+    Description="Port the web UI listens on. Must match the host port if using host networking."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">3001</Config>
+
+  <Config
+    Name="CORS Origin"
+    Target="CORS_ORIGIN"
+    Default="http://localhost:3001"
+    Mode=""
+    Description="Allowed CORS origin. Set to your server's IP/hostname and port, e.g. http://192.168.1.100:3001"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false">http://localhost:3001</Config>
+
+  <Config
+    Name="Insecure Cookies (HTTP)"
+    Target="INSECURE_COOKIES"
+    Default="false"
+    Mode=""
+    Description="Set to true if accessing over plain HTTP on your LAN (not HTTPS)."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">false</Config>
+
+  <Config
+    Name="HTTPS Enabled"
+    Target="HTTPS_ENABLED"
+    Default="false"
+    Mode=""
+    Description="Enable HTTPS. Requires SSL certificates mounted at the certs path."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">false</Config>
+
+  <Config
+    Name="Timezone"
+    Target="TZ"
+    Default="Etc/UTC"
+    Mode=""
+    Description="Container timezone, e.g. America/New_York"
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">Etc/UTC</Config>
+
+  <Config
+    Name="PUID"
+    Target="PUID"
+    Default="99"
+    Mode=""
+    Description="User ID to run the container as. 99 = nobody (Unraid default)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">99</Config>
+
+  <Config
+    Name="PGID"
+    Target="PGID"
+    Default="100"
+    Mode=""
+    Description="Group ID to run the container as. 100 = users (Unraid default)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">100</Config>
+
+  <!-- Discord (optional) -->
+  <Config
+    Name="Discord Notifications"
+    Target="DISCORD_ENABLED"
+    Default="false"
+    Mode=""
+    Description="Enable Discord webhook notifications."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">false</Config>
+
+  <Config
+    Name="Discord Webhook URL"
+    Target="DISCORD_WEBHOOK_URL"
+    Default=""
+    Mode=""
+    Description="Discord webhook URL for server notifications. Only used if DISCORD_ENABLED is true."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false"></Config>
+
+  <!-- Rate limiting -->
+  <Config
+    Name="Rate Limit Max Requests"
+    Target="RATE_LIMIT_MAX"
+    Default="1000"
+    Mode=""
+    Description="Maximum number of requests per rate limit window."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">1000</Config>
+
+  <Config
+    Name="Rate Limit Window (ms)"
+    Target="RATE_LIMIT_WINDOW"
+    Default="900000"
+    Mode=""
+    Description="Rate limit window in milliseconds (default: 900000 = 15 minutes)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">900000</Config>
+
+  <!-- Paths -->
+  <Config
+    Name="Database"
+    Target="/app/data/db"
+    Default="/mnt/user/appdata/hytale-server-manager/db"
+    Mode="rw"
+    Description="Persistent storage for the SQLite database."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/db</Config>
+
+  <Config
+    Name="Servers"
+    Target="/app/servers"
+    Default="/mnt/user/appdata/hytale-server-manager/servers"
+    Mode="rw"
+    Description="Storage for Hytale game server installations."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/servers</Config>
+
+  <Config
+    Name="Backups"
+    Target="/app/data/backups"
+    Default="/mnt/user/appdata/hytale-server-manager/backups"
+    Mode="rw"
+    Description="Storage for automated server backups."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/backups</Config>
+
+  <Config
+    Name="Logs"
+    Target="/app/logs"
+    Default="/mnt/user/appdata/hytale-server-manager/logs"
+    Mode="rw"
+    Description="Application and Prisma log output."
+    Type="Path"
+    Display="always"
+    Required="false"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/logs</Config>
+
+  <Config
+    Name="SSL Certificates"
+    Target="/app/data/certs"
+    Default="/mnt/user/appdata/hytale-server-manager/certs"
+    Mode="rw"
+    Description="SSL certificate storage. Only needed if HTTPS_ENABLED is true."
+    Type="Path"
+    Display="advanced"
+    Required="false"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/certs</Config>
+
+  <Config
+    Name="Hytale Downloader"
+    Target="/app/data/hytale-downloader"
+    Default="/mnt/user/appdata/hytale-server-manager/hytale-downloader"
+    Mode="rw"
+    Description="Storage for the Hytale downloader tool."
+    Type="Path"
+    Display="advanced"
+    Required="false"
+    Mask="false">/mnt/user/appdata/hytale-server-manager/hytale-downloader</Config>
+
+</Container>

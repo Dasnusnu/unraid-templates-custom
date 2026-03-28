@@ -17,7 +17,7 @@
   </Overview>
   <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:8000]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/PrintGuard.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/KA_PrintGuard.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/oliverbravery/PrintGuard/main/static/images/logo.png</Icon>
   <ExtraParams/>
   <PostArgs/>

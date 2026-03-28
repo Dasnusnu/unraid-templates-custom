@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>PrintGuard</Name>
+  <Repository>ghcr.io/oliverbravery/printguard:latest</Repository>
+  <Registry>https://github.com/oliverbravery/PrintGuard/pkgs/container/printguard</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>true</Privileged>
+  <Support>https://github.com/oliverbravery/PrintGuard/issues</Support>
+  <Project>https://github.com/oliverbravery/PrintGuard</Project>
+  <Overview>
+    PrintGuard is a real-time 3D print failure detection system powered by computer vision. It monitors your printer-facing cameras and automatically pauses or cancels print jobs when failures (e.g. spaghetti, layer shifts, detached prints) are detected. Manage multiple printers and cameras through its built-in web dashboard and receive desktop or mobile push notifications. Integrates with OctoPrint.
+
+    On first run, visit http://[IP]:[PORT]/setup to complete the initial configuration wizard (SSL certificates, VAPID keys for push notifications, camera feeds, and OctoPrint integration).
+
+    NOTE: Privileged mode is required for USB/local camera device access. If you are using RTSP streams exclusively you may be able to disable it.
+  </Overview>
+  <Category>Tools:Utilities</Category>
+  <WebUI>http://[IP]:[PORT:8000]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/PrintGuard.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/oliverbravery/PrintGuard/main/static/images/logo.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>OctoPrint (optional) — required only if you want to integrate print job control</Requires>
+
+  <!-- Ports -->
+  <Config
+    Name="Web UI Port"
+    Target="8000"
+    Default="8000"
+    Mode="tcp"
+    Description="Port for the PrintGuard web interface and setup wizard."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8000</Config>
+
+  <!-- Paths -->
+  <Config
+    Name="Appdata Storage"
+    Target="/data"
+    Default="/mnt/user/appdata/printguard"
+    Mode="rw"
+    Description="Persistent storage for PrintGuard configuration, SSL certificates, VAPID keys, and cache. Back this directory up to preserve your setup."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/printguard</Config>
+
+</Container>

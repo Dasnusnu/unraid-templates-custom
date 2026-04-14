@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>WindroseServer</Name>
+  <Repository>indifferentbroccoli/windrose-server-docker:latest</Repository>
+  <Registry>https://hub.docker.com/r/indifferentbroccoli/windrose-server-docker</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/indifferentbroccoli/windrose-server-docker/issues</Support>
+  <Project>https://github.com/indifferentbroccoli/windrose-server-docker</Project>
+  <Overview>
+    Dockerized dedicated server for Windrose. Runs the Windows server binary under Wine on Debian.
+
+    Windrose uses a peer-to-peer networking model keyed off an Invite Code — no ports need to be forwarded or published. Players join your server by entering the Invite Code you set below.
+
+    Recommended resources:
+      2 players:  8 GB RAM
+      4 players:  12 GB RAM
+      10 players: 16 GB RAM
+      Disk: ~35 GB SSD recommended
+
+    You MUST set an INVITE_CODE (6+ alphanumeric characters, case-sensitive) before starting.
+  </Overview>
+  <Category>GameServers:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/KA_WindroseServer.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/indifferentbroccoli/windrose-server-docker/main/branding/marketing_assets_banner.png</Icon>
+  <ExtraParams>--stop-timeout=30</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+
+  <!-- Required: Invite Code -->
+  <Config
+    Name="Invite Code"
+    Target="INVITE_CODE"
+    Default=""
+    Mode=""
+    Description="REQUIRED. 6+ character alphanumeric invite code (case-sensitive). Players use this to join your server."
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false"></Config>
+
+  <!-- Core server settings -->
+  <Config
+    Name="Server Name"
+    Target="SERVER_NAME"
+    Default="Windrose Server"
+    Mode=""
+    Description="Display name for the server."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">Windrose Server</Config>
+
+  <Config
+    Name="Server Password"
+    Target="SERVER_PASSWORD"
+    Default=""
+    Mode=""
+    Description="Optional password for server access. Leave blank for no password."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="true"></Config>
+
+  <Config
+    Name="Max Players"
+    Target="MAX_PLAYERS"
+    Default="10"
+    Mode=""
+    Description="Maximum number of players (typically 2-10)."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">10</Config>
+
+  <!-- Startup behavior -->
+  <Config
+    Name="Update On Start"
+    Target="UPDATE_ON_START"
+    Default="true"
+    Mode=""
+    Description="Validate and update server files each time the container starts."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">true</Config>
+
+  <Config
+    Name="Generate Settings"
+    Target="GENERATE_SETTINGS"
+    Default="true"
+    Mode=""
+    Description="Auto-generate server configuration files on start."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">true</Config>
+
+  <!-- User/group -->
+  <Config
+    Name="PUID"
+    Target="PUID"
+    Default="99"
+    Mode=""
+    Description="User ID to run the container as. 99 = nobody (Unraid default)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">99</Config>
+
+  <Config
+    Name="PGID"
+    Target="PGID"
+    Default="100"
+    Mode=""
+    Description="Group ID to run the container as. 100 = users (Unraid default)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false">100</Config>
+
+  <!-- Internal — do not change -->
+  <Config
+    Name="P2P Proxy Address"
+    Target="P2P_PROXY_ADDRESS"
+    Default="127.0.0.1"
+    Mode=""
+    Description="Internal P2P proxy socket address. Leave as 127.0.0.1 — do not change."
+    Type="Variable"
+    Display="advanced-hide"
+    Required="false"
+    Mask="false">127.0.0.1</Config>
+
+  <!-- Paths -->
+  <Config
+    Name="Server Files"
+    Target="/home/steam/server-files"
+    Default="/mnt/user/appdata/windrose/server-files"
+    Mode="rw"
+    Description="Storage for the installed Windrose server files, world saves, and configuration. Back this up to preserve your world."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/windrose/server-files</Config>
+
+</Container>

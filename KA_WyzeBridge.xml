@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>WyzeBridge</Name>
+  <Repository>idisposablegithub365/wyze-bridge:latest</Repository>
+  <Registry>https://hub.docker.com/r/idisposablegithub365/wyze-bridge</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/IDisposable/docker-wyze-bridge/issues</Support>
+  <Project>https://github.com/IDisposable/docker-wyze-bridge</Project>
+  <Overview>
+    WyzeBridge (IDisposable fork) creates local RTMP, RTSP, HLS, and WebRTC streams for your Wyze cameras, letting you use them in Home Assistant, Frigate, VLC, or any media player without relying on Wyze's cloud.
+
+    You must supply your Wyze account credentials (WYZE_EMAIL and WYZE_PASSWORD) and an API key pair (API_ID and API_KEY) obtained from the Wyze developer portal at https://developer-api.wyze.com.
+
+    Set WB_IP to your Unraid server's LAN IP address so WebRTC connections can find the server.
+
+    Stream URLs after setup:
+      RTMP:   rtmp://[IP]:1935/[camera-name]
+      RTSP:   rtsp://[IP]:8554/[camera-name]
+      HLS:    http://[IP]:8888/[camera-name]/stream.m3u8
+      WebRTC: http://[IP]:8889/[camera-name]
+  </Overview>
+  <Category>HomeAutomation: Network:Other</Category>
+  <WebUI>http://[IP]:[PORT:5000]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/dasnusnu/unraid-templates-custom/main/KA_WyzeBridge.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/IDisposable/docker-wyze-bridge/main/app/img/wyze-bridge.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+
+  <!-- Wyze credentials -->
+  <Config
+    Name="Wyze Email"
+    Target="WYZE_EMAIL"
+    Default=""
+    Mode=""
+    Description="Your Wyze account email address."
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false"></Config>
+
+  <Config
+    Name="Wyze Password"
+    Target="WYZE_PASSWORD"
+    Default=""
+    Mode=""
+    Description="Your Wyze account password."
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="true"></Config>
+
+  <Config
+    Name="API ID"
+    Target="API_ID"
+    Default=""
+    Mode=""
+    Description="Wyze API key ID from https://developer-api.wyze.com"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false"></Config>
+
+  <Config
+    Name="API Key"
+    Target="API_KEY"
+    Default=""
+    Mode=""
+    Description="Wyze API key secret from https://developer-api.wyze.com"
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="true"></Config>
+
+  <!-- Network / WebRTC -->
+  <Config
+    Name="Host IP (WB_IP)"
+    Target="WB_IP"
+    Default=""
+    Mode=""
+    Description="Your Unraid server's LAN IP address (e.g. 192.168.1.100). Required for WebRTC to work correctly."
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false"></Config>
+
+  <!-- Auth -->
+  <Config
+    Name="Enable Auth (WB_AUTH)"
+    Target="WB_AUTH"
+    Default="false"
+    Mode=""
+    Description="Enable authentication for the web UI and streams. Set to true to require a username/password."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false">false</Config>
+
+  <!-- Ports -->
+  <Config
+    Name="Web UI Port"
+    Target="5000"
+    Default="5000"
+    Mode="tcp"
+    Description="WyzeBridge web interface."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">5000</Config>
+
+  <Config
+    Name="RTMP Port"
+    Target="1935"
+    Default="1935"
+    Mode="tcp"
+    Description="RTMP stream port. Use rtmp://[IP]:1935/[camera-name]"
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">1935</Config>
+
+  <Config
+    Name="RTSP Port"
+    Target="8554"
+    Default="8554"
+    Mode="tcp"
+    Description="RTSP stream port. Use rtsp://[IP]:8554/[camera-name]"
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8554</Config>
+
+  <Config
+    Name="HLS Port"
+    Target="8888"
+    Default="8888"
+    Mode="tcp"
+    Description="HLS stream port. Use http://[IP]:8888/[camera-name]/stream.m3u8"
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8888</Config>
+
+  <Config
+    Name="WebRTC Port"
+    Target="8889"
+    Default="8889"
+    Mode="tcp"
+    Description="WebRTC stream port."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8889</Config>
+
+  <Config
+    Name="WebRTC/ICE UDP Port"
+    Target="8189"
+    Default="8189"
+    Mode="udp"
+    Description="WebRTC ICE UDP port for peer connection negotiation."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8189</Config>
+
+</Container>
